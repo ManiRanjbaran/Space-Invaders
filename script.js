@@ -1,5 +1,15 @@
 const border = document.querySelector('.border');
 
+const firstSquare = 0;
+const lastSquare = 274;
+const invaderMS = 300;
+
+let shooterPos = 237;
+let width = 24;
+let direction = 1;
+let invadersId;
+
+// Making each Square inside the border
 for (let i = 0; i < 275; i++) {
     const square = document.createElement('div');
     border.appendChild(square)
@@ -20,6 +30,50 @@ function drawInvaders() {
 }
 drawInvaders();
 
+function removeInvaders() {
+    for (let i = 0; i < alienInvaders.length; i++) {
+        squares[alienInvaders[i]].classList.remove('invader');
+    }
+}
 
-// Add Shooter
-squares[237].classList.add('shooter');
+// Draw next position of the Shooter and remove the last one 
+// IF THE SHOOTER MOVES TO RIGHT
+function drawShooter() {
+    squares[shooterPos].classList.add('shooter');
+}
+drawShooter();
+
+function game() {
+    function moveShooter(event) {
+        squares[shooterPos].classList.remove('shooter'); // Remove shooter's last placement
+
+        switch (event.key) {
+            case 'a':
+                if (shooterPos > firstSquare) {
+                    shooterPos -= 1;
+                    drawShooter();
+                }
+                break;
+            case 'd':
+                if (shooterPos < lastSquare) {
+                    shooterPos += 1;
+                    drawShooter();
+                }
+                break;
+        }
+    }
+    document.addEventListener('keydown', moveShooter);
+
+    function moveInvaders() {
+        const leftEdge = alienInvaders[0] % width === 0;
+        const rightEdge = alienInvaders[alienInvaders.length - 1] % width === width - 1;
+        removeInvaders();
+
+        for (let i = 0; i < alienInvaders.length; i++) {
+            alienInvaders[i] += direction;
+        }
+        drawInvaders();
+    }
+    invadersId = setInterval(moveInvaders, invaderMS); // MS : Movement Speed
+}
+game();
