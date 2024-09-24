@@ -1,10 +1,11 @@
 body {
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
 }
 
 .border {
+    display: flex;
+    flex-wrap: wrap;
     width: 500px;
     height: 430px;
     border: 1px solid black;
@@ -13,4 +14,13 @@ body {
 .border div {
     width: 20px;
     height: 20px;
+}
+
+.invader {
+    background-color: purple;
+    border-radius: 10px;
+}
+
+.shooter {
+    background-color: red;
 }
