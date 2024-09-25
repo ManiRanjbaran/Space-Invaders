@@ -50,3 +50,10 @@ h6 {
     font-size: large;
     color: red;
 }
+
+#score {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    height: 93vh;
+}
