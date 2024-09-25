@@ -1,13 +1,15 @@
 const border = document.querySelector('.border');
+const scoreDisplay = document.getElementById('score');
 
 const firstSquare = 0;
 const lastSquare = 274;
-const invaderMS = 300;
+const invaderMS = 50;
 
 let shooterPos = 237;
 let width = 24;
 let direction = 1;
 let invadersId;
+let score = 0;
 
 // Making each Square inside the border
 for (let i = 0; i < 275; i++) {
@@ -70,10 +72,19 @@ function game() {
         removeInvaders();
 
         for (let i = 0; i < alienInvaders.length; i++) {
-            alienInvaders[i] += direction;
+            alienInvaders[i] += direction; // Moves each Invader
+
+            if (alienInvaders[i] === shooterPos) // Checks if you lost
+                gameOver();
         }
         drawInvaders();
     }
-    invadersId = setInterval(moveInvaders, invaderMS); // MS : Movement Speed
+    invadersId = setInterval(moveInvaders, invaderMS);
+
+    function gameOver() {
+        clearInterval(invadersId);
+        document.removeEventListener('keydown', moveShooter);
+        scoreDisplay.innerText = "You lost!";
+    }
 }
 game();

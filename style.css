@@ -24,3 +24,13 @@ body {
 .shooter {
     background-color: red;
 }
+
+#score {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    height: 90vh;
+    font-family: Arial;
+    font-size: large;
+    color: red;
+}
