@@ -1,15 +1,17 @@
 const border = document.querySelector('.border');
-const scoreDisplay = document.getElementById('score');
+const resultDisplay = document.getElementById('result');
 
 const firstSquare = 0;
 const lastSquare = 274;
-const invaderMS = 50;
+const invaderMS = 90; // MS: Movement Speed
+const laserMS = 100; // MS: Movement Speed
 
 let shooterPos = 237;
-let width = 24;
+let width = 25;
 let direction = 1;
 let invadersId;
 let score = 0;
+let goingRight = true;
 
 // Making each Square inside the border
 for (let i = 0; i < 275; i++) {
@@ -71,20 +73,59 @@ function game() {
         const rightEdge = alienInvaders[alienInvaders.length - 1] % width === width - 1;
         removeInvaders();
 
+        if (rightEdge && goingRight) {
+            for (let i = 0; i < alienInvaders.length; i++) {
+                alienInvaders[i] += width + 1;
+                direction = -1;
+                goingRight = false;
+            }
+        }
+
+        if (leftEdge && !goingRight) {
+            for (let i = 0; i < alienInvaders.length; i++) {
+                alienInvaders[i] += width - 1;
+                direction = 1;
+                goingRight = true;
+            }
+        }
+        checkGameOver();
+
         for (let i = 0; i < alienInvaders.length; i++) {
             alienInvaders[i] += direction; // Moves each Invader
-
-            if (alienInvaders[i] === shooterPos) // Checks if you lost
-                gameOver();
+            checkGameOver();
         }
         drawInvaders();
     }
     invadersId = setInterval(moveInvaders, invaderMS);
 
-    function gameOver() {
-        clearInterval(invadersId);
-        document.removeEventListener('keydown', moveShooter);
-        scoreDisplay.innerText = "You lost!";
+    function checkGameOver() {
+        for (let i = 0; i < alienInvaders.length; i++) {
+            if (alienInvaders[i] === shooterPos) {
+                clearInterval(invadersId);
+                document.removeEventListener('keydown', moveShooter);
+                resultDisplay.innerText = "You lost!";
+            }
+        }
     }
+
+    function shoot() {
+        let laserPos = shooterPos;
+        function moveLaser() {
+            squares[laserPos].classList.remove('laser');
+            laserPos -= width;
+            squares[laserPos].classList.add('laser');
+
+            if (squares[laserPos].classList.contains('invader')) {
+                squares[laserPos].classList.remove('invader');
+                squares[laserPos].classList.remove('laser');
+                squares[laserPos].classList.add('boom');
+
+                setTimeout(() => squares[laserPos].classList.remove('boom'), 100)
+                clearInterval(laserId)
+            }
+        }
+        laserId = setInterval(moveLaser, 100);
+    }
+    document.addEventListener('click', shoot);
 }
 game();

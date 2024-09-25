@@ -3,6 +3,13 @@ body {
     justify-content: center;
 }
 
+h6 {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    height: 100vh;
+}
+
 .border {
     display: flex;
     flex-wrap: wrap;
@@ -22,10 +29,19 @@ body {
 }
 
 .shooter {
+    background-color: blue;
+}
+
+.laser {
+    background-color: orange;
+    border-radius: 100%;
+}
+
+.boom {
     background-color: red;
 }
 
-#score {
+#result {
     position: absolute;
     display: flex;
     align-items: center;
