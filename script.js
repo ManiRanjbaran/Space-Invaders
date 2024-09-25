@@ -4,7 +4,7 @@ const scoreDisplay = document.getElementById('score');
 
 const firstSquare = 0;
 const lastSquare = 274;
-const invaderMS = 200; // MS: Movement Speed
+const invaderMS = 120; // MS: Movement Speed
 const laserMS = 90; // MS: Movement Speed
 
 let shooterPos = 237;
@@ -91,7 +91,6 @@ function game() {
                 goingRight = true;
             }
         }
-        checkGameOver();
 
         for (let i = 0; i < alienInvaders.length; i++) {
             alienInvaders[i] += direction; // Moves each Invader
@@ -113,37 +112,44 @@ function game() {
 
     function shoot() {
         let laserPos = shooterPos;
-        function moveLaser() {
+        function addLaser() {
+            // Adding and moving The laser
             squares[laserPos].classList.remove('laser');
             laserPos -= width;
             squares[laserPos].classList.add('laser');
 
+            // IF alien was in laser's pixel, Remove the alien
             if (squares[laserPos].classList.contains('invader')) {
                 squares[laserPos].classList.remove('laser');
                 squares[laserPos].classList.remove('invader');
                 squares[laserPos].classList.add('boom');
-                score++
 
+                //Remove the Boom effect
                 setTimeout(() => squares[laserPos].classList.remove('boom'), 100);
-                clearInterval(laserId)
+                clearInterval(laserId);
 
+                // Removing aliens when laser hit
                 const alienRemoved = alienInvaders.indexOf(laserPos);
                 aliensRemoved.push(alienRemoved);
-                score++;
-                scoreDisplay.innerText = score / 2;
 
-                checkGameWon();
+                score++;
+                scoreDisplay.innerText = score;
+
+                checkWin();
             }
         }
-        laserId = setInterval(moveLaser, laserMS);
+        laserId = setInterval(addLaser, laserMS);
     }
     document.addEventListener('click', shoot);
 
-    function checkGameWon() {
+    function checkWin() {
         if (alienInvaders.length === aliensRemoved.length) {
             resultDisplay.innerText = "You Won!";
-            clearInterval(invadersId);
+            document.removeEventListener('click', shoot);
+            document.removeEventListener('keydown', moveShooter);
         }
     }
 }
 game();
+
+// i want to add a feature so that when i win, just like when i lose, shooter and laser stop... 
