@@ -12,6 +12,7 @@ let direction = 1;
 let invadersId;
 let score = 0;
 let goingRight = true;
+let aliensRemoved = [];
 
 // Making each Square inside the border
 for (let i = 0; i < 275; i++) {
@@ -29,7 +30,8 @@ const alienInvaders = [
 
 function drawInvaders() {
     for (let i = 0; i < alienInvaders.length; i++) {
-        squares[alienInvaders[i]].classList.add('invader');
+        if (!aliensRemoved.includes(i))
+            squares[alienInvaders[i]].classList.add('invader');
     }
 }
 drawInvaders();
@@ -120,11 +122,15 @@ function game() {
                 squares[laserPos].classList.remove('laser');
                 squares[laserPos].classList.add('boom');
 
-                setTimeout(() => squares[laserPos].classList.remove('boom'), 100)
+                setTimeout(() => squares[laserPos].classList.remove('boom'), 100);
                 clearInterval(laserId)
+
+                const invadersRemoved = alienInvaders.indexOf(laserPos);
+                invadersRemoved = aliensRemoved.push(invadersRemoved);
+
             }
         }
-        laserId = setInterval(moveLaser, 100);
+        laserId = setInterval(moveLaser, laserMS);
     }
     document.addEventListener('click', shoot);
 }
