@@ -105,6 +105,7 @@ function game() {
             if (alienInvaders[i] === shooterPos) {
                 clearInterval(invadersId);
                 document.removeEventListener('keydown', moveShooter);
+                document.removeEventListener('click', shoot);
                 resultDisplay.innerText = "You lost!";
             }
         }
@@ -151,5 +152,3 @@ function game() {
     }
 }
 game();
-
-// i want to add a feature so that when i win, just like when i lose, shooter and laser stop... 
